@@ -10,7 +10,7 @@ setup(
     url='https://github.com/JaapMoolenaar/sentry-assembla',
     description='A Sentry.io plugin for Assembla integration',
     keywords='sentry-assembla sentry assembla',
-    #long_description=open('README.md').read(),
+    long_description=open('README.md').read(),
     packages=find_packages(),
     dependency_links=[],
     license='MIT',
