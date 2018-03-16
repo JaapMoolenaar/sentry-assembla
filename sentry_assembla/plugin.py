@@ -39,9 +39,6 @@ class AssemblaPlugin(CorePluginMixin, IssueTrackingPlugin2):
         ('Source', author_url + '/sentry-assembla'),
     ]
     
-# NEXT VERSION?
-#    issue_fields = frozenset(['id', 'number', 'summary'])
-    
     def get_group_urls(self):
         """Adds an extra url to allow for autocompletion in some selects"""
         return super(AssemblaPlugin, self).get_group_urls() + [
@@ -194,13 +191,6 @@ class AssemblaPlugin(CorePluginMixin, IssueTrackingPlugin2):
 
         return response['id']
     
-# NEXT VERSION?
-#        return {
-#            'id': response['id'],
-#            'number': response['number'],
-#            'summary': response['summary'],
-#        }
-
     def link_issue(self, request, group, form_data, **kwargs):
         """Handle a link issue form post"""
         client = self.get_client(request.user)
@@ -228,32 +218,9 @@ class AssemblaPlugin(CorePluginMixin, IssueTrackingPlugin2):
             'title': issue['summary']
         }
 
-# NEXT VERSION?
-#        return {
-#            'id': issue['id'],
-#            'number': issue['number'],
-#            'summary': issue['summary']
-#        }
-
-# NEXT VERSION?
-#    def get_issue_label(self, group, issue, **kwargs):
-#        if 'number' in issue:
-#            return 'Assembla ticket (#%s)' % issue['number']
-#        
-#        return 'Assembla ticket'
-
     def get_issue_label(self, group, issue_id):
         """Generate a generic label"""
         return 'Assembla ticket'
-
-# NEXT VERSION?
-#    def get_issue_url(self, group, issue, **kwargs):
-#        space = self.get_option('space', group.project)
-#        
-#        if 'number' in issue:
-#            return 'https://app.assembla.com/spaces/%s/tickets/%s' % (space, issue['number'])
-#
-#        return 'https://app.assembla.com/spaces/%s/tickets' % space
 
     def get_issue_url(self, group, issue_id):
         """Generate a generic url, v8.22 doesn't allow 
