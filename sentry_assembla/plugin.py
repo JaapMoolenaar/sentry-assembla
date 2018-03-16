@@ -39,8 +39,7 @@ class AssemblaPlugin(CorePluginMixin, IssueTrackingPlugin2):
         ('Source', author_url + '/sentry-assembla'),
     ]
     
-# NEXT VERSION?
-#    issue_fields = frozenset(['id', 'number', 'summary'])
+    issue_fields = frozenset(['id', 'number', 'summary'])
     
     def get_group_urls(self):
         """Adds an extra url to allow for autocompletion in some selects"""
@@ -192,14 +191,11 @@ class AssemblaPlugin(CorePluginMixin, IssueTrackingPlugin2):
         except Exception as e:
             self.raise_error(e, identity=client.auth)
 
-        return response['id']
-    
-# NEXT VERSION?
-#        return {
-#            'id': response['id'],
-#            'number': response['number'],
-#            'summary': response['summary'],
-#        }
+        return {
+            'id': response['id'],
+            'number': response['number'],
+            'summary': response['summary'],
+        }
 
     def link_issue(self, request, group, form_data, **kwargs):
         """Handle a link issue form post"""
@@ -222,45 +218,27 @@ class AssemblaPlugin(CorePluginMixin, IssueTrackingPlugin2):
             except Exception as e:
                 self.raise_error(e, identity=client.auth)
                 
-        #link_issue is expected to return an issue object containing a 'title'
-        #https://github.com/getsentry/sentry/blob/8.22.0/src/sentry/plugins/bases/issue2.py#L278
         return {
-            'title': issue['summary']
+            'id': issue['id'],
+            'number': issue['number'],
+            'summary': issue['summary']
         }
 
-# NEXT VERSION?
-#        return {
-#            'id': issue['id'],
-#            'number': issue['number'],
-#            'summary': issue['summary']
-#        }
-
-# NEXT VERSION?
-#    def get_issue_label(self, group, issue, **kwargs):
-#        if 'number' in issue:
-#            return 'Assembla ticket (#%s)' % issue['number']
-#        
-#        return 'Assembla ticket'
-
-    def get_issue_label(self, group, issue_id):
-        """Generate a generic label"""
+    def get_issue_label(self, group, issue, **kwargs):
+        """Generate a label with the ticket number"""
+        #Todo(jm): Add summary too?
+        if 'number' in issue:
+            return 'Assembla ticket (#%s)' % issue['number']
+        
         return 'Assembla ticket'
 
-# NEXT VERSION?
-#    def get_issue_url(self, group, issue, **kwargs):
-#        space = self.get_option('space', group.project)
-#        
-#        if 'number' in issue:
-#            return 'https://app.assembla.com/spaces/%s/tickets/%s' % (space, issue['number'])
-#
-#        return 'https://app.assembla.com/spaces/%s/tickets' % space
-
-    def get_issue_url(self, group, issue_id):
-        """Generate a generic url, v8.22 doesn't allow 
-        storing more values for an issue"""
+    def get_issue_url(self, group, issue, **kwargs):
+        """Generate an url to the ticket"""
         space = self.get_option('space', group.project)
         
-        # This is a full url actualy, we're missing the url
+        if 'number' in issue:
+            return 'https://app.assembla.com/spaces/%s/tickets/%s' % (space, issue['number'])
+
         return 'https://app.assembla.com/spaces/%s/tickets' % space
 
     def validate_config(self, project, config, actor):
