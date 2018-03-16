@@ -5,45 +5,40 @@ mind._
 
 This plugin is developed using the Senty on premise *v8.22* docker image
 
-In this version, a link to the Assembla ticket is harder to create.
-This is because assembla requires a ticket number in the url, whilst sentry
-stores it's ID. Getting the ticket number afterwards is hard, because an API
-client can't be contructed.
-
-A new version for Sentry is however on the horizon, this version allows storage 
-of more data per issue, thus allowing me to store the ticket number and 
-generating a valid link.
-
+I created this version using the plugin structure I could gather from the sentry 
+source. *I haven't tested this in the new version*
 
 Installation
 ============
 
 This package is not on PyPI yet, please install using:
 
-`sudo -H pip install -e git+https://github.com/jaapmoolenaar/sentry-assembla#egg=sentry_assembla`
+`sudo -H pip install -e git+https://github.com/jaapmoolenaar/sentry-assembla@new-version#egg=sentry_assembla`
 
 Or add the following to your requirements.txt in the docker on premise path:
 
-`-e git+https://github.com/jaapmoolenaar/sentry-assembla#egg=sentry_assembla`
+`-e git+https://github.com/jaapmoolenaar/sentry-assembla@new-version#egg=sentry_assembla`
 
+_After which, a `docker-compose build` will be required._
 
 Configuration
 =============
 
 The Assembla API requires a client ID and Key.
 These can be created here: https://app.assembla.com/user/edit/manage_clients
+
 A valid redirect url would be: 
 
 `<hostname>/account/settings/social/associate/complete/assembla/`
 
-This can be set in the sentry.conf.py file:
+These values can be set in the sentry.conf.py file:
 
 ```python
 ASSEMBLA_CLIENT_ID = 'id'
 ASSEMBLA_CLIENT_SECRET = 'secret'
 ```
 
-Or using environment variables with the same name in for instance docker-compose.yml:
+Or using environment variables, with the same name, in, for instance, docker-compose.yml:
 
 ```yml
 version: '2'
